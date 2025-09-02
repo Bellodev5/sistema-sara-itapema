@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Sara Itapema - Sistema</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="header-bg"></div>
+    <div class="header-overlay"></div>
+    
+    <nav>
+      <div class="nav-brand">
+        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-church" style="color: white; font-size: 24px;"></i>
+        </div>
+        <h1>Igreja Sara Itapema</h1>
+      </div>
+      
+      <div class="nav-links">
+        <a href="#" class="active">
+          <i class="fas fa-user-plus"></i>
+          <span>CADASTRO</span>
+        </a>
+        <a href="./graficoVisitantes.html">
+          <i class="fas fa-chart-line"></i>
+          <span>GRÁFICO VISITANTES</span>
+        </a>
+      </div>
+      
+      <div class="nav-mobile-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </nav>
+    
+    <div class="header-content">
+      <h2>Sistema de Gerenciamento</h2>
+      <p>Gerenciamento de culto por meio de cadastros de informações</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2 class="page-title">Cadastro</h2>
+    
+    <div class="form-container">
+      <div class="form-group">
+        <input type="text" id="nome" placeholder="Nome" class="input-field">
+      </div>
+      
+      <div class="form-group">
+        <input type="text" id="descricao" placeholder="Descrição" class="input-field">
+      </div>
+      
+      <div class="form-group">
+        <select id="area" class="input-field">
+          <option value="louvor">Louvor</option>
+          <option value="visitante">Visitante</option>  
+          <option value="testemunho">Testemunho</option>
+          <option value="avisoCulto">Aviso de culto</option>
+          <option value="avisoPastor">Aviso para o pastor</option>
+        </select>
+      </div>
+
+      <!-- Campos extras para Visitante -->
+       <div class="form-group visitante-campos" style="display: none;">
+        <input type="text" id="telefone" placeholder="Telefone" class="input-field">
+      </div>
+      <div class="form-group visitante-campos" style="display: none;">
+        <select id="maisInfo" class="input-field">
+          <option value="">Gostaria de saber mais sobre...</option>
+          <option value="celula">Célula</option>
+          <option value="batismo">Batismo</option>
+          <option value="jesus">Jesus</option>
+        </select>
+      </div>
+
+
+      <button id="btn-adicionar" class="btn-adicionar">
+        <i class="fas fa-plus-circle"></i>
+        Adicionar
+      </button>
+    </div>
+
+    <h2 class="areas-title">Áreas</h2>
+    
+    <div class="areas-container">
+      <div class="area louvor">
+        <h3><i class="fas fa-music"></i> Louvor</h3>
+        <div id="louvor-lista" class="lista">
+          <div class="lista-vazia">Nenhum registro encontrado</div>
+        </div>
+      </div>
+
+      <div class="area visitante">
+        <h3><i class="fas fa-users"></i> Visitantes</h3>
+        <div id="visitante-lista" class="lista">
+          <div class="lista-vazia">Nenhum registro encontrado</div>
+        </div>
+      </div>
+
+      <div class="area testemunho">
+        <h3><i class="fas fa-cross"></i> Testemunho</h3>
+        <div id="testemunho-lista" class="lista">
+          <div class="lista-vazia">Nenhum registro encontrado</div>
+        </div>
+      </div>
+      
+      <div class="area culto">
+        <h3><i class="fas fa-bell"></i> Avisos de culto</h3>
+        <div id="avisoCulto-lista" class="lista">
+          <div class="lista-vazia">Nenhum registro encontrado</div>
+        </div>
+      </div>
+      
+      <div class="area pastor">
+        <h3><i class="fas fa-hands-praying"></i> Avisos para pastor</h3>
+        <div id="avisoPastor-lista" class="lista">
+          <div class="lista-vazia">Nenhum registro encontrado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Igreja Sara Itapema &copy; 2025 - Todos os direitos reservados</p>
+  </footer>   
+</body>
+</html>
