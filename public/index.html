@@ -6,6 +6,7 @@
   <title>Sistema Sara Itapema - Sistema</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <script src="front.js" defer></script>
 </head>
 <body>
   <header>
@@ -14,8 +15,9 @@
     
     <nav>
       <div class="nav-brand">
-        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          <i class="fas fa-church" style="color: white; font-size: 24px;"></i>
+      
+        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2);border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <img src="logoSara.png" alt="logo sara">
         </div>
         <h1>Igreja Sara Itapema</h1>
       </div>
@@ -64,13 +66,12 @@
         </select>
       </div>
 
-      <!-- Campos extras para Visitante -->
        <div class="form-group visitante-campos" style="display: none;">
         <input type="text" id="telefone" placeholder="Telefone" class="input-field">
       </div>
       <div class="form-group visitante-campos" style="display: none;">
         <select id="maisInfo" class="input-field">
-          <option value="">Gostaria de saber mais sobre...</option>
+          <option value="" disabled selected>Gostaria de saber mais sobre...</option>
           <option value="celula">Célula</option>
           <option value="batismo">Batismo</option>
           <option value="jesus">Jesus</option>

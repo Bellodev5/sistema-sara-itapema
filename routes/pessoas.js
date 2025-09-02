@@ -13,23 +13,32 @@ router.get("/", (req, res) => {
 
 // Adicionar nova pessoa
 router.post("/", (req, res) => {
-  const { nome, area, descricao } = req.body;
+  const { nome, area, descricao, telefone, maisInfo } = req.body;
 
   if (!nome || !area) {
     return res.status(400).json({ error: "Nome e área são obrigatórios" });
   }
 
-  const desc = descricao || "";
+  const desc = area === "visitante" ? null : descricao || "";
+  const tel = area === "visitante" ? telefone || "-" : null;
+  const mais = area === "visitante" ? maisInfo || "-" : null;
 
   db.run(
-    "INSERT INTO pessoas (nome, area, descricao) VALUES (?, ?, ?)",
-    [nome, area, desc],
+    "INSERT INTO pessoas (nome, area, descricao, telefone, maisInfo) VALUES (?, ?, ?, ?, ?)",
+    [nome, area, desc, tel, mais],
     function (err) {
       if (err) {
         console.error("Erro no INSERT:", err);
         return res.status(500).json({ error: err.message });
       }
-      res.json({ id: this.lastID, nome, area, descricao: desc });
+      res.json({
+        id: this.lastID,
+        nome,
+        area,
+        descricao: desc,
+        telefone: tel,
+        maisInfo: mais
+      });
     }
   );
 });

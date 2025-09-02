@@ -18,7 +18,9 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
       area TEXT NOT NULL,
-      descricao TEXT
+      descricao TEXT,
+      telefone TEXT,
+      maisInfo TEXT
     )
   `);
 });

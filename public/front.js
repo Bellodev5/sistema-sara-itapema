@@ -1,105 +1,163 @@
-const API_URL = "/pessoas";
-
-// Mostrar/ocultar campos de visitante
-const areaSelect = document.getElementById("area");
-const visitanteCampos = document.querySelectorAll(".visitante-campos");
-
-function toggleCamposVisitante() {
-  const mostrar = areaSelect && areaSelect.value === "visitante";
-  visitanteCampos.forEach(campo => {
-    campo.style.display = mostrar ? "block" : "none";
-  });
-}
-
-// Inicializar campos quando a página carregar
 document.addEventListener("DOMContentLoaded", () => {
-  carregarPessoas();
-  toggleCamposVisitante(); // Garantir estado inicial correto
+  const API_URL = "/pessoas";
 
-  // Adicionar event listener para o select
-  if (areaSelect) areaSelect.addEventListener("change", toggleCamposVisitante);
+  // query AFTER DOMContentLoaded (garante que os elementos existam)
+  const areaSelect = document.getElementById("area");
+  const visitanteCampos = Array.from(
+    document.querySelectorAll(".visitante-campos")
+  );
+  // procura botão por id ou por class (pra compatibilidade com seu HTML/CSS)
+  const btnAdicionar =
+    document.getElementById("btn-adicionar") ||
+    document.querySelector(".btn-adicionar");
 
-  document.getElementById("btn-adicionar")
-    .addEventListener("click", adicionarPessoa);
-});
+  // remove style inline que possa bloquear o display controlado por classes
+  visitanteCampos.forEach((c) => c.removeAttribute("style"));
 
-async function carregarPessoas() {
-  const res = await fetch(API_URL);
-  const pessoas = await res.json();
-
-  const louvorLista = document.getElementById("louvor-lista");
-  const visitanteLista = document.getElementById("visitante-lista");
-  const testemunhoLista = document.getElementById("testemunho-lista");
-  const avisoCultoLista = document.getElementById("avisoCulto-lista");
-  const avisoPastorLista = document.getElementById("avisoPastor-lista");
-
-  louvorLista.innerHTML = "";
-  visitanteLista.innerHTML = "";
-  testemunhoLista.innerHTML = "";
-  avisoCultoLista.innerHTML = "";
-  avisoPastorLista.innerHTML = "";
-
-  pessoas.forEach(p => {
-    const div = document.createElement("div");
-    div.classList.add("pessoa");
-
-    let extraInfo = "";
-    if ((p.area || "").toString().toLowerCase() === "visitante") {
-      extraInfo = `<p>Telefone: ${p.telefone || "-"}</p>
-                   <p>Mais info: ${p.maisInfo || "-"}</p>`;
-    } else {
-      extraInfo = `<p>${p.descricao || "-"}</p>`;
-    }
-
-    div.innerHTML = `
-      <div class="pessoa-info">
-        <span class="pessoa-nome">${p.nome}</span>
-        ${extraInfo}
-      </div>
-      <button class="btn-remover" onclick="excluirPessoa(${p.id})">X</button>
-    `;
-
-    // normaliza para evitar erro com maiúsculas/espaços (p.ex. "Aviso Culto")
-    const areaKey = (p.area || "").toString().toLowerCase().replace(/\s/g, "");
-    if (areaKey === "louvor") louvorLista.appendChild(div);
-    else if (areaKey === "visitante") visitanteLista.appendChild(div);
-    else if (areaKey === "testemunho") testemunhoLista.appendChild(div);
-    else if (areaKey === "avisoculto") avisoCultoLista.appendChild(div);
-    else if (areaKey === "avisopastor") avisoPastorLista.appendChild(div);
-  });
-}
-
-async function adicionarPessoa() {
-  const nome = document.getElementById("nome").value;
-  const area = document.getElementById("area").value;
-  const descricao = document.getElementById("descricao").value;
-  let telefone = "";
-  let maisInfo = "";
-
-  if (!nome) return alert("Digite um nome");
-
-  if (area === "visitante") {
-    telefone = document.getElementById("telefone").value;
-    maisInfo = document.getElementById("maisInfo").value;
+  function toggleCamposVisitante() {
+    const mostrar = areaSelect && areaSelect.value === "visitante";
+    visitanteCampos.forEach((campo) =>
+      campo.classList.toggle("visible", mostrar)
+    );
   }
 
-  await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ nome, area, descricao, telefone, maisInfo })
-  });
+  // Carrega lista de pessoas e popula as seções
+  async function carregarPessoas() {
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      const pessoas = await res.json();
 
-  document.getElementById("nome").value = "";
-  document.getElementById("descricao").value = "";
-  if (area === "visitante") {
+      const louvorLista = document.getElementById("louvor-lista");
+      const visitanteLista = document.getElementById("visitante-lista");
+      const testemunhoLista = document.getElementById("testemunho-lista");
+      const avisoCultoLista = document.getElementById("avisoCulto-lista");
+      const avisoPastorLista = document.getElementById("avisoPastor-lista");
+
+      [
+        louvorLista,
+        visitanteLista,
+        testemunhoLista,
+        avisoCultoLista,
+        avisoPastorLista,
+      ].forEach((el) => {
+        if (el) el.innerHTML = "";
+      });
+
+      (pessoas || []).forEach((p) => {
+        const div = document.createElement("div");
+        div.className = "pessoa";
+
+        const areaNormalized = (p.area || "")
+          .toString()
+          .toLowerCase()
+          .replace(/\s/g, "");
+        const extraInfo =
+          areaNormalized === "visitante"
+            ? `<p>Telefone: ${p.telefone || "-"}</p><p>Mais info: ${
+                p.maisInfo || "-"
+              }</p>`
+            : `<p>${p.descricao || "-"}</p>`;
+
+        div.innerHTML = `
+          <div class="pessoa-info">
+            <span class="pessoa-nome">${escapeHtml(p.nome)}</span>
+            ${extraInfo}
+          </div>
+          <button class="btn-remover" data-id="${p.id}">X</button>
+        `;
+
+        if (areaNormalized === "louvor" && louvorLista)
+          louvorLista.appendChild(div);
+        else if (areaNormalized === "visitante" && visitanteLista)
+          visitanteLista.appendChild(div);
+        else if (areaNormalized === "testemunho" && testemunhoLista)
+          testemunhoLista.appendChild(div);
+        else if (areaNormalized === "avisoculto" && avisoCultoLista)
+          avisoCultoLista.appendChild(div);
+        else if (areaNormalized === "avisopastor" && avisoPastorLista)
+          avisoPastorLista.appendChild(div);
+      });
+
+      // conecta botões de remoção (delegação simples)
+      document.querySelectorAll(".btn-remover").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          if (id) excluirPessoa(id);
+        });
+      });
+    } catch (err) {
+      console.error("carregarPessoas erro:", err);
+    }
+  }
+
+  async function adicionarPessoa() {
+    const nome = document.getElementById("nome").value.trim();
+    const area = document.getElementById("area").value;
+    let descricao = "";
+    let telefone = "";
+    let maisInfo = "";
+  
+    if (!nome) return alert("Digite um nome");
+  
+    if (area === "visitante") {
+      // Pega telefone
+      telefone = document.getElementById("telefone").value.trim() || "-";
+  
+      // Pega texto visível do select "maisInfo"
+      const maisInfoSelect = document.getElementById("maisInfo");
+      maisInfo = maisInfoSelect.value 
+        ? maisInfoSelect.options[maisInfoSelect.selectedIndex].text
+        : "-";
+    } else {
+      descricao = document.getElementById("descricao").value.trim() || "-";
+    }
+  
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, area, descricao, telefone, maisInfo })
+    });
+  
+    // Limpa os campos do formulário
+    document.getElementById("nome").value = "";
+    document.getElementById("descricao").value = "";
     document.getElementById("telefone").value = "";
     document.getElementById("maisInfo").value = "";
+  
+    // Atualiza a lista
+    carregarPessoas();
   }
 
-  carregarPessoas();
-}
+  async function excluirPessoa(id) {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      carregarPessoas();
+    } catch (err) {
+      console.error("excluirPessoa erro:", err);
+    }
+  }
 
-async function excluirPessoa(id) {
-  await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str).replace(
+      /[&<>"']/g,
+      (s) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }[s])
+    );
+  }
+
+  // liga eventos
+  if (areaSelect) areaSelect.addEventListener("change", toggleCamposVisitante);
+  if (btnAdicionar) btnAdicionar.addEventListener("click", adicionarPessoa);
+
+  // estado inicial
+  toggleCamposVisitante();
   carregarPessoas();
-}
+});
