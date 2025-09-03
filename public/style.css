@@ -275,6 +275,52 @@ nav {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
 }
+.btn-planilha {
+  position: absolute;
+  top: 1;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  background-color: #cb0a5a;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.btn-planilha:hover {
+  background-color: #28a745;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-planilha svg {
+  margin-right: 8px;
+  fill: white;
+  width: 16px;
+  height: 16px;
+}
+.visitante-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.visitante-header h3 {
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #cb0a5a;
+  color: #cb0a5a;
+  width: 100%;
+  position: relative;
+}
 
 .areas-title {
   color: var(--primary);
