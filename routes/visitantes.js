@@ -18,13 +18,13 @@ router.get("/", async (req, res, next) => {
 // Criar visitante
 router.post("/", async (req, res, next) => {
   try {
-    const { nome, contato, interesse, mais_info } = req.body;
+    const { nome, contato, interesse, mais_info, endereco } = req.body;
 
     if (!nome) return res.status(400).json({ message: "Nome é obrigatório" });
 
     const { rows } = await query(
-      "INSERT INTO visitantes (nome, contato, interesse, mais_info) VALUES ($1, $2, $3, $4) RETURNING *",
-      [nome, contato || null, interesse || null, mais_info || null]
+      "INSERT INTO visitantes (nome, contato, interesse, mais_info, endereco) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [nome, contato, endereco || null, interesse || null, mais_info || null]
     );
 
     res.status(201).json(rows[0]);
