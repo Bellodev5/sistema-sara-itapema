@@ -7,7 +7,7 @@
 
 - **Frontend:** HTML, CSS  
 - **Backend:** Node.js, Express  
-- **Banco de Dados:** SqlLte  
+- **Banco de Dados:** PostgreSQL
 
 ---
 ## 👨‍💻 Autores
