@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Seletores do DOM
   const areaSelect = document.getElementById("area");
   const visitanteCampos = Array.from(
     document.querySelectorAll(".visitante-campos")
@@ -8,10 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-adicionar") ||
     document.querySelector(".btn-adicionar");
 
-  // Remove estilos inline que possam atrapalhar a exibição
   visitanteCampos.forEach((c) => c.removeAttribute("style"));
 
-  // Mostrar/ocultar campos de visitante
   function toggleCamposVisitante() {
     const mostrar = areaSelect && areaSelect.value === "visitante";
     visitanteCampos.forEach((campo) =>
@@ -19,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  // Função para escapar HTML
   function escapeHtml(str) {
     if (!str) return "";
     return String(str).replace(
