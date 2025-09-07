@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <script src="chart.js" defer></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
   <header>
@@ -15,7 +16,6 @@
     
     <nav>
       <div class="nav-brand">
-      
         <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2);border-radius: 8px; display: flex; align-items: center; justify-content: center;">
           <img src="logoSara.png" alt="logo sara">
         </div>
@@ -44,13 +44,20 @@
     </div>
   </header>
 
-  <main>
-      <h3>Visitantes por Culto</h3>
-    <canvas id="visitantesChart" width="400" height="200"></canvas>
+<main style="padding: 40px 20px; max-width: 1400px; margin: 0 auto;">
+    <h3 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">Visitantes por Culto</h3>
+    
+    <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; min-height: 500px;">
+      <canvas id="graficoPessoas" style="width: 100% !important; height: 400px !important;"></canvas>
+    </div>
+    
+    <div style="text-align: center; margin-top: 20px;">
+      <button onclick="trocarTipoGrafico('bar')" style="margin: 5px; padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">Barras</button>
+      <button onclick="trocarTipoGrafico('pie')" style="margin: 5px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Pizza</button>
+      <button onclick="trocarTipoGrafico('doughnut')" style="margin: 5px; padding: 10px 20px; background: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer;">Rosquinha</button>
+    </div>
   </main>
  
   <footer>
     <p>Igreja Sara Itapema &copy; 2025 - Todos os direitos reservados</p>
-  </footer>   
-</body>
-</html>
+  </footer>
