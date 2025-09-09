@@ -3,48 +3,37 @@ import { query } from "../db.js";
 
 const router = express.Router();
 
-// Listar todos os conteúdos
+// Listar tudo
 router.get("/", async (req, res, next) => {
   try {
-    const { rows } = await query("SELECT * FROM conteudo ORDER BY data_criacao DESC");
+    const { rows } = await query("SELECT * FROM gerenciamento");
     res.json(rows);
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/", async (req, res) => {
+// Adicionar
+router.post("/", async (req, res, next) => {
   try {
-    const { tipo, nome, descricao } = req.body;
-    
-    if ((tipo !== "avisoculto" && tipo !== "avisopastor") && !nome) {
-      return res.status(400).json({ message: "Nome é obrigatório" });
-    }
-
-    // Descrição sempre obrigatória
-    if (!descricao) {
-      return res.status(400).json({ message: "Descrição é obrigatória" });
-    }
-
+    const { avisosPastor, avisoCulto, nome, louvor, testemunho } = req.body;
     const { rows } = await query(
-      "INSERT INTO conteudo (tipo, nome, descricao) VALUES ($1, $2, $3) RETURNING id, tipo, nome, descricao",
-      [tipo, nome || null, descricao]
+      `INSERT INTO gerenciamento (avisosPastor, avisoCulto, nome, louvor, testemunho) 
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [avisosPastor, avisoCulto, nome, louvor, testemunho]
     );
-
-    res.status(201).json(rows[0]);
+    res.json(rows[0]);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erro interno" });
+    next(err);
   }
 });
 
-// Deletar conteúdo por ID
+// Deletar por id (se você adicionar um id SERIAL depois)
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { rowCount } = await query("DELETE FROM conteudo WHERE id = $1", [id]);
-    if (rowCount === 0) return res.status(404).json({ message: "Conteúdo não encontrado" });
-    res.status(204).send();
+    await query("DELETE FROM gerenciamento WHERE id = $1", [id]);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
